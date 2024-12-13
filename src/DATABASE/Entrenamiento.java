@@ -18,6 +18,9 @@ public class Entrenamiento {
         this.nombre = nombre;
     }
 
+    public Entrenamiento(int id, String nombre, int duracion, String nivel) {
+    }
+
     public int getDuracion() {
         return duracion;
     }

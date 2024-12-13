@@ -1,4 +1,5 @@
 package UI;
+import DATABASE.Entrenamiento;
 import DAO.EntrenamientoDAO;
 
 public class Menu {
@@ -23,11 +24,11 @@ public class Menu {
 
 
             switch (opcion) {
-                case 1 -> dao.getAllEntrenamientos();
+                case 1 -> entrenamientoDAO.getAllEntrenamientos();
                 case 2 -> añadirEntrenamiento();
                 case 3 -> modificarEntrenamiento();
                 case 4 -> eliminarEntrenamiento();
-                case 5 -> dao.mostrarEstadisticas();
+                case 5 -> entrenamientoDAO.mostrarEstadisticas();
                 case 0 -> System.out.println("Saliendo...");
                 default -> System.out.println("Opción no válida.");
             }
@@ -39,7 +40,7 @@ public class Menu {
         int duracion = Lector.pedirInt("Ingrese la duración:");
         String nivel = Lector.pedirString("Ingrese el nivel:");
 
-        dao.addEntrenamiento(new Entrenamiento(id, nombre, duracion, nivel));
+        entrenamientoDAO.addEntrenamiento(new DATABASE.Entrenamiento(id, nombre, duracion, nivel));
         System.out.println("Entrenamiento añadido correctamente.");
     }
     private void modificarEntrenamiento() {
@@ -48,13 +49,13 @@ public class Menu {
         int duracion = Lector.pedirInt("Ingrese la nueva duración:");
         String nivel = Lector.pedirString("Ingrese el nuevo nivel:");
 
-        dao.updateEntrenamiento(id, new Entrenamiento(id, nombre, duracion, nivel));
+        entrenamientoDAO.updateEntrenamiento(id, new Entrenamiento(id, nombre, duracion, nivel));
         System.out.println("Entrenamiento modificado correctamente.");
     }
 
     private void eliminarEntrenamiento() {
         int id = Lector.pedirInt("Ingrese el ID del entrenamiento a eliminar:");
-        dao.deleteEntrenamiento(id);
+        entrenamientoDAO.deleteEntrenamiento(id);
         System.out.println("Entrenamiento eliminado correctamente.");
     }
 }
