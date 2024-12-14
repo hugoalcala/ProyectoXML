@@ -1,33 +1,133 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <entrenamientos>
-        
+                                        
+    
+    
+    
+    
+    
+    
+    
+    
     <entrenamiento id="2">
-                
-        <nombre>HIIT Avanzado</nombre>
-                
-        <duracion>40</duracion>
-                
+                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        <nombre>bici</nombre>
+                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        <duracion>120</duracion>
+                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
         <nivel>Duro</nivel>
-            
+                                                                            
+    
+    
+    
+    
+    
+    
+    
+    
     </entrenamiento>
-        
+                                        
+    
+    
+    
+    
+    
+    
+    
+    
     <entrenamiento id="3">
-                
-        <nombre>Yoga</nombre>
-                
-        <duracion>45</duracion>
-                
-        <nivel>Fácil</nivel>
-            
-    </entrenamiento>
+                                                                                
         
-    <entrenamiento id="4">
-                
-        <nombre>Pilates</nombre>
-                
-        <duracion>50</duracion>
-                
-        <nivel>Intermedio</nivel>
-            
+        
+        
+        
+        
+        
+        
+        
+        <nombre>Yoga</nombre>
+                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        <duracion>45</duracion>
+                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        <nivel>Fácil</nivel>
+                                                                            
+    
+    
+    
+    
+    
+    
+    
+    
     </entrenamiento>
+                
+    
+    
+    
+    <entrenamiento id="3">
+                                
+        
+        
+        <id>3</id>
+                                
+        
+        
+        <nombre>pesas</nombre>
+                                
+        
+        
+        <duracion>60</duracion>
+                                
+        
+        
+        <nivel>dificil</nivel>
+                            
+    
+    
+    </entrenamiento>
+            
+    
+    
+    
+
 </entrenamientos>

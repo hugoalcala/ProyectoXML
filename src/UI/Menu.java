@@ -24,7 +24,7 @@ public class Menu {
 
 
             switch (opcion) {
-                case 1 -> entrenamientoDAO.getAllEntrenamientos();
+                case 1 -> verEntrenamientos();
                 case 2 -> añadirEntrenamiento();
                 case 3 -> modificarEntrenamiento();
                 case 4 -> eliminarEntrenamiento();
@@ -34,14 +34,19 @@ public class Menu {
             }
         } while (opcion != 0);
     }
-    private void añadirEntrenamiento() {
-        int id = Lector.pedirInt("Ingrese el ID:");
-        String nombre = Lector.pedirString("Ingrese el nombre:");
-        int duracion = Lector.pedirInt("Ingrese la duración:");
-        String nivel = Lector.pedirString("Ingrese el nivel:");
 
-        entrenamientoDAO.addEntrenamiento(new DATABASE.Entrenamiento(id, nombre, duracion, nivel));
-        System.out.println("Entrenamiento añadido correctamente.");
+    private void verEntrenamientos() {
+        System.out.println("Lista de entrenamientos: ");
+        entrenamientoDAO.mostrarEntrenamientos();
+    }
+
+    private void añadirEntrenamiento() {
+        int id = Lector.pedirInt("Ingrese el ID del entrenamiento: ");
+        String nombre = Lector.pedirString("Ingrese el nombre del entrenamiento: ");
+        int duracion = Lector.pedirInt("Ingrese la duracion del entrenamiento: ");
+        String nivel = Lector.pedirString("Ingrese el nivel del entrenamiento: ");
+
+        entrenamientoDAO.addEntrenamiento(id, nombre, duracion, nivel);
     }
     private void modificarEntrenamiento() {
         int id = Lector.pedirInt("Ingrese el ID del entrenamiento a modificar:");
@@ -49,13 +54,14 @@ public class Menu {
         int duracion = Lector.pedirInt("Ingrese la nueva duración:");
         String nivel = Lector.pedirString("Ingrese el nuevo nivel:");
 
-        entrenamientoDAO.updateEntrenamiento(id, new Entrenamiento(id, nombre, duracion, nivel));
-        System.out.println("Entrenamiento modificado correctamente.");
+        entrenamientoDAO.modificarEntrenamiento(id, nombre, duracion);
     }
 
     private void eliminarEntrenamiento() {
         int id = Lector.pedirInt("Ingrese el ID del entrenamiento a eliminar:");
-        entrenamientoDAO.deleteEntrenamiento(id);
-        System.out.println("Entrenamiento eliminado correctamente.");
+        entrenamientoDAO.eliminarEntrenamiento(id);
+    }
+    private void mostrarEstadisticas() {
+        entrenamientoDAO.mostrarEstadisticas();
     }
 }

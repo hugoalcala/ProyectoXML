@@ -1,105 +1,82 @@
 package DAO;
 
-import DATABASE.Entrenamiento;
+import DATABASE.XML;
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EntrenamientoDAO {
-    private final File file;
+    private final XML xml;
 
     public EntrenamientoDAO() {
-        this.file = new File("XML/entrenamiento.xml"); // Ruta al archivo XML
-        if (!file.exists()) {
-            inicializarArchivo(); // Crear archivo si no existe
+        this.xml = new XML("XML/entrenamiento.xml");
+        if (!xml.getFile().exists()){
+            inicializarArchivo();
         }
     }
+    public void mostrarEntrenamientos() {
+        XML.leer();
+    }
 
-    // Leer todos los entrenamientos desde el XML
-    public List<Entrenamiento> getAllEntrenamientos() {
-        List<Entrenamiento> entrenamientos = new ArrayList<>();
+    public void addEntrenamiento(int id, String nombre, int duracion, String nivel) {
+        XML.escribir(String.valueOf(id), nombre, String.valueOf(duracion), nivel);
+    }
+
+    public void modificarEntrenamiento(int id, String nuevoNombre, int nuevaDuracion) {
+        XML.modificar(String.valueOf(id), nuevoNombre, String.valueOf(nuevaDuracion));
+    }
+
+    public void eliminarEntrenamiento(int id) {
+        XML.eliminar(String.valueOf(id));
+    }
+    public void mostrarEstadisticas() {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(file);
+            Document doc = builder.parse(xml.getFile());
 
             doc.getDocumentElement().normalize();
+
             NodeList nodeList = doc.getElementsByTagName("entrenamiento");
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
+            if (nodeList == null || nodeList.getLength() == 0) {
+                System.out.println("No hay entrenamientos registrados.");
+                return;
+            }
+
+            int totalEntrenamientos = nodeList.getLength();
+            int sumaDuracion = 0;
+            int i = 0;
+            Node node;
+            Element elemento;
+            int duracion;
+
+            while (i < nodeList.getLength()) {
+                node = nodeList.item(i);
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    // Manejar nodos nulos para cada subnodo
-                    String idText = getNodeValue(element, "id");
-                    String nombre = getNodeValue(element, "nombre");
-                    String duracionText = getNodeValue(element, "duracion");
-                    String nivel = getNodeValue(element, "nivel");
-                    
-                    int id = Integer.parseInt(element.getElementsByTagName("id").item(0).getTextContent());
-                    String nombre = element.getElementsByTagName("nombre").item(0).getTextContent();
-                    int duracion = Integer.parseInt(element.getElementsByTagName("duracion").item(0).getTextContent());
-                    String nivel = element.getElementsByTagName("nivel").item(0).getTextContent();
-
-                    entrenamientos.add(new Entrenamiento(id, nombre, duracion, nivel));
+                    elemento = (Element) node;
+                    duracion = Integer.parseInt(elemento.getElementsByTagName("duracion").item(0).getTextContent());
+                    sumaDuracion += duracion;
                 }
+
+                i++;
             }
-        } catch (Exception e) {
-            System.err.println("Error al leer el archivo XML: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return entrenamientos;
-    }
 
-    private String getNodeValue(Element element, String id) {
+            double promedioDuracion = (double) sumaDuracion / totalEntrenamientos;
 
-    }
-
-    // Añadir un entrenamiento al XML
-    public void addEntrenamiento(Entrenamiento entrenamiento) {
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(file);
-
-            Element root = doc.getDocumentElement();
-
-            Element nuevoEntrenamiento = doc.createElement("entrenamiento");
-
-            Element idElement = doc.createElement("id");
-            idElement.appendChild(doc.createTextNode(String.valueOf(entrenamiento.getId())));
-            nuevoEntrenamiento.appendChild(idElement);
-
-            Element nombreElement = doc.createElement("nombre");
-            nombreElement.appendChild(doc.createTextNode(entrenamiento.getNombre()));
-            nuevoEntrenamiento.appendChild(nombreElement);
-
-            Element duracionElement = doc.createElement("duracion");
-            duracionElement.appendChild(doc.createTextNode(String.valueOf(entrenamiento.getDuracion())));
-            nuevoEntrenamiento.appendChild(duracionElement);
-
-            Element nivelElement = doc.createElement("nivel");
-            nivelElement.appendChild(doc.createTextNode(entrenamiento.getNivel()));
-            nuevoEntrenamiento.appendChild(nivelElement);
-
-            root.appendChild(nuevoEntrenamiento);
-
-            guardarDocumento(doc);
+            // Mostrar las estadísticas
+            System.out.println("=== Estadísticas de Entrenamientos ===");
+            System.out.println("Total de entrenamientos: " + totalEntrenamientos);
+            System.out.println("Duración total: " + sumaDuracion + " minutos");
+            System.out.printf("Promedio de duración: %.2f minutos%n", promedioDuracion);
 
         } catch (Exception e) {
-            System.err.println("Error al añadir el entrenamiento al archivo XML: " + e.getMessage());
+            System.out.println("Error al calcular las estadísticas: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // Inicializar archivo XML vacío si no existe
     private void inicializarArchivo() {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -109,7 +86,7 @@ public class EntrenamientoDAO {
             Element root = doc.createElement("listaEntrenamientos");
             doc.appendChild(root);
 
-            guardarDocumento(doc);
+            xml.guardarDocumento(doc);
 
             System.out.println("Archivo XML inicializado correctamente.");
         } catch (Exception e) {
@@ -118,131 +95,4 @@ public class EntrenamientoDAO {
         }
     }
 
-    // Guardar documento XML en el archivo
-    private void guardarDocumento(Document doc) {
-        try {
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(file);
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.transform(source, result);
-
-            System.out.println("Archivo XML guardado correctamente.");
-        } catch (TransformerException e) {
-            System.err.println("Error al guardar el archivo XML: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-    // Actualizar un entrenamiento por ID
-    public void updateEntrenamiento(int id, Entrenamiento nuevoEntrenamiento) {
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(file);
-
-            doc.getDocumentElement().normalize();
-            NodeList nodeList = doc.getElementsByTagName("entrenamiento");
-
-            boolean encontrado = false;
-
-            // Buscar el nodo con el ID especificado
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-
-                    int currentId = Integer.parseInt(element.getElementsByTagName("id").item(0).getTextContent());
-                    if (currentId == id) {
-                        // Actualizar los valores del nodo
-                        element.getElementsByTagName("nombre").item(0).setTextContent(nuevoEntrenamiento.getNombre());
-                        element.getElementsByTagName("duracion").item(0).setTextContent(String.valueOf(nuevoEntrenamiento.getDuracion()));
-                        element.getElementsByTagName("nivel").item(0).setTextContent(nuevoEntrenamiento.getNivel());
-                        encontrado = true;
-                        break;
-                    }
-                }
-            }
-
-            if (encontrado) {
-                guardarDocumento(doc);
-                System.out.println("Entrenamiento actualizado correctamente.");
-            } else {
-                System.out.println("Entrenamiento con ID " + id + " no encontrado.");
-            }
-        } catch (Exception e) {
-            System.err.println("Error al actualizar el entrenamiento: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-    // Eliminar un entrenamiento por ID
-    public void deleteEntrenamiento(int id) {
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(file);
-
-            doc.getDocumentElement().normalize();
-            NodeList nodeList = doc.getElementsByTagName("entrenamiento");
-
-            boolean encontrado = false;
-
-            // Buscar y eliminar el nodo con el ID especificado
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-
-                    int currentId = Integer.parseInt(element.getElementsByTagName("id").item(0).getTextContent());
-                    if (currentId == id) {
-                        element.getParentNode().removeChild(element);
-                        encontrado = true;
-                        break;
-                    }
-                }
-            }
-
-            if (encontrado) {
-                guardarDocumento(doc);
-                System.out.println("Entrenamiento eliminado correctamente.");
-            } else {
-                System.out.println("Entrenamiento con ID " + id + " no encontrado.");
-            }
-        } catch (Exception e) {
-            System.err.println("Error al eliminar el entrenamiento: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-
-    // Mostrar estadísticas sobre los entrenamientos
-    public void mostrarEstadisticas() {
-        try {
-            // Leer todos los entrenamientos
-            List<Entrenamiento> entrenamientos = getAllEntrenamientos();
-
-            // Si no hay entrenamientos, mostrar mensaje
-            if (entrenamientos.isEmpty()) {
-                System.out.println("No hay entrenamientos registrados.");
-                return;
-            }
-
-            // Calcular estadísticas
-            int totalEntrenamientos = entrenamientos.size();
-            int sumaDuraciones = entrenamientos.stream().mapToInt(Entrenamiento::getDuracion).sum();
-            double promedioDuracion = (double) sumaDuraciones / totalEntrenamientos;
-
-            // Mostrar estadísticas
-            System.out.println("Estadísticas:");
-            System.out.println("Número total de entrenamientos: " + totalEntrenamientos);
-            System.out.println("Duración total: " + sumaDuraciones + " minutos");
-            System.out.printf("Promedio de duración: %.2f minutos%n", promedioDuracion);
-
-        } catch (Exception e) {
-            System.err.println("Error al calcular las estadísticas: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 }
