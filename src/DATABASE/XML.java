@@ -81,10 +81,6 @@ public class XML {
             Element nuevoEntrenamiento = doc.createElement("entrenamiento");
             nuevoEntrenamiento.setAttribute("id", id);
 
-            Element idElemento = doc.createElement("id");
-            idElemento.appendChild(doc.createTextNode(id));
-            nuevoEntrenamiento.appendChild(idElemento);
-
             Element nombreElemento = doc.createElement("nombre");
             nombreElemento.appendChild(doc.createTextNode(nombre));
             nuevoEntrenamiento.appendChild(nombreElemento);

@@ -1,133 +1,60 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <entrenamientos>
-                                        
-    
-    
-    
-    
-    
-    
-    
+            
     
     <entrenamiento id="2">
-                                                                                
-        
-        
-        
-        
-        
-        
-        
+                        
         
         <nombre>bici</nombre>
-                                                                                
-        
-        
-        
-        
-        
-        
-        
+                        
         
         <duracion>120</duracion>
-                                                                                
-        
-        
-        
-        
-        
-        
-        
+                        
         
         <nivel>Duro</nivel>
-                                                                            
-    
-    
-    
-    
-    
-    
-    
-    
-    </entrenamiento>
-                                        
-    
-    
-    
-    
-    
-    
-    
-    
-    <entrenamiento id="3">
-                                                                                
-        
-        
-        
-        
-        
-        
-        
-        
-        <nombre>Yoga</nombre>
-                                                                                
-        
-        
-        
-        
-        
-        
-        
-        
-        <duracion>45</duracion>
-                                                                                
-        
-        
-        
-        
-        
-        
-        
-        
-        <nivel>Fácil</nivel>
-                                                                            
-    
-    
-    
-    
-    
-    
-    
-    
-    </entrenamiento>
-                
-    
-    
-    
-    <entrenamiento id="3">
-                                
-        
-        
-        <id>3</id>
-                                
-        
-        
-        <nombre>pesas</nombre>
-                                
-        
-        
-        <duracion>60</duracion>
-                                
-        
-        
-        <nivel>dificil</nivel>
-                            
-    
+                    
     
     </entrenamiento>
             
     
+    <entrenamiento id="3">
+                        
+        
+        <nombre>Yoga</nombre>
+                        
+        
+        <duracion>45</duracion>
+                        
+        
+        <nivel>Fácil</nivel>
+                    
     
+    </entrenamiento>
+            
     
-
+    <entrenamiento id="5">
+                        
+        
+        <nombre>waterpolo</nombre>
+                        
+        
+        <duracion>60</duracion>
+                        
+        
+        <nivel>dificil</nivel>
+                    
+    
+    </entrenamiento>
+        
+    
+    <entrenamiento id="1">
+                
+        <nombre>correr</nombre>
+                
+        <duracion>50</duracion>
+                
+        <nivel>duro</nivel>
+            
+    </entrenamiento>
+    
 </entrenamientos>
